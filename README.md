@@ -14,6 +14,8 @@ Adapt the code such that the user can "anonymise" the DICOM and produce an audit
 
 The application should produce an audit log of the work it performs. The content and format of the log can be of your own design. 
 
+Sample data has been provided in the `sample_data` folder. This is synthetic data so already has synthetic patient details. For the purpose of this exercise, assume that what is there is identifiable and needs anonymising.
+
 We will be looking at your ability to understand and modify the provided code, your knowledge and application of the DICOM standard, and the design decisions you make.
 
 # Getting started
