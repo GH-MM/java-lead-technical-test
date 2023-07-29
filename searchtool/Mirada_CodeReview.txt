@@ -1,0 +1,49 @@
+
+The code is well presented with descriptive names for methods and variables which makes the code easy to follow.
+Exception handling has been given good thought and I will expand on how I think this could be further utilised.
+There are some useful comments to help clarify the logic.
+
+I have some suggestions on how we can improve and expand on this work which I would like to go through with you but I 
+have made notes on my thinking here to provide feedback as well as comments in the code to highlight specific points.
+
+The class relies on being called as an application from the main method.  It would be useful to be able to instantiate this
+class to be able to use it from other applications.
+
+The code relies on a csv file with the path to the data and requires internal knowledge of the contents of the csv ("**") check.
+Perhaps the tool could take arguments to define where to look for files and return a "usage" response if it doesn't understand the arguments.
+
+The target operating system could be generalised, to make the tool more reusable in the future.  The use of "\" is MS Windows specific and
+the check for "#recycle" will not be found on most systems (just NAS).  I a list of ignored locations in a file passed as an argument to the
+tool would allow the tool to be  used more generally.  The same String is also used multiple times within the code.  It would be better to define
+these as a constant.
+
+There may be other archive types we need to read in the future.  One I can think of which I have seen in the past is a tar file but there may be 
+other types.  A common interface to wrap different archives will make the tool more extensible in the future and allow is to implement new archives
+without have to change the class doing the searching.
+
+The code relies on files having specific extensions to identify them.  There may be other types that contain a DICOM file.  
+One option may be to pass a list of known extensions to the tool. A more reliable option, although slower, would be to treat every file
+as a possible DICOM file.  You could use dcm4che to do this or read the first part of the file to look for "DICM" to identify if it is a 
+DICOM file.  Beware also, the dcm file may be gzipped which would require further handling.  The implementation of SimpleFileVisitor could be modified 
+to do the checks.  By extracting the inline implementation, it would make it reusable and tests could be added more easily.
+
+Make sure you close resources in finally blocks or use try-with-resources to prevent a potential resource leak.
+For example, the Scanner object in the readListOfPaths() method is closed within the try block. 
+If an exception occurs before the close() method is called, the resource may not be closed, potentially leading to a resource leak.
+
+It is better to catch specific exceptions rather than the generic Exception which is done in several places.
+This can be risky and can hide bugs and make debugging more difficult as it can mask what went wrong.
+
+Some refactoring to put operations that may thrown an exception in their own method.  There is a possibility that the temp file could
+be left behind if an exception was through before it is deleted.  Try to follow the single responsibility principle, some of the 
+methods are a little long and would benefit from being broken down.
+
+There is some good error logging however, you could provide some more context when an error occurs to help with debugging. 
+For example, the name of the file or entry that caused a problem would allow easy lookup of the problem file although I appreciate that the 
+file was output to the log on another line, if the logging level was turned down, this may not be available.
+The results are written to the std out.  I feel that passing in an output file as an argument would be better.  There is also "logging"
+going to the std out which can be removed as it is going to the logger.
+
+Some tests to verify that the tool is finding the expected files in an test location would be of benefit.  As changes are then made to
+add other extensions etc in the future, we will be confident that the existing functionality remains unaffected.
+

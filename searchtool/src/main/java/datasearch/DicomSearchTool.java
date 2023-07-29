@@ -72,11 +72,12 @@ public final class DicomSearchTool
             String line = scanner.next();
             if ( !line.startsWith( "**" ) )
             {
-               paths.add( line.replace( "\r", "" ) );
+               paths.add( line.replace( "\r", "" ) );  // TODO use trim() to remote whitespace.
             }
          }
-
-         scanner.close();
+      // TODO 	Potential leak if exception thrown before this.
+      // 		use try-with-resources
+         scanner.close();  
       }
       catch ( Exception exception )
       {
@@ -181,7 +182,7 @@ public final class DicomSearchTool
       // TODO: process the data set
    }
 
-   public static void archiveSearch( String file )
+   public static void archiveSearch( String file )  // TODO why is this method public?
    {
       System.out.println( "Visiting archive: " + file ); //$NON-NLS-1$
       String extension = FileNameUtils.getExtension( file.toLowerCase() );
@@ -277,7 +278,7 @@ public final class DicomSearchTool
 
    private static void entrySearch( ArchiveEntry entry, InputStream stream, String file ) throws IOException
    {
-      String filepath = file + "\\" + entry.getName().replace( '/', '\\' ); //$NON-NLS-1$
+      String filepath = file + "\\" + entry.getName().replace( '/', '\\' ); //$NON-NLS-1$  // TODO Windows specific, make general
 
       if ( ( entry.getName().toLowerCase().endsWith( ".dcm" ) //$NON-NLS-1$
              || ( !entry.isDirectory() && FileNameUtils.getExtension( entry.getName().toString() ).isEmpty() ) ) )
