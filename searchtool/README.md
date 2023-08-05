@@ -8,7 +8,9 @@ The anonymisation tool allows for different anonymisation profiles to be defined
 
 The root DICOM UID was 25 characters which is an issue for dcm4che, so it was truncated by 1 for the purposes of this proof of concept.  A different re-UID process may be needed in practice.
 
-General application logging has been performed using log4j but the anonymisation process has been written to write the input and output files being anonymised to the log along with the original study and instance UIDs.  This allows a lookup to compare input and output files.  This logging may need review if there is a requirement to record specific tag mappings.  A better way for this though may be to keep a persistent record of tag mappings in a database to allow de-anonymisation.  UID mappings would be most useful to provide persistence of the mappings of data is anonymised in parts.  This would ensure references between files would be maintained.
+General application logging has been performed using log4j, The anonymisation process has been written to write the input and output files being anonymised to an optional independent log along with the original study and instance UIDs.  This allows a lookup to compare input and output files.  This logging may need review if there is a requirement to record specific tag mappings.  A better way for this though may be to keep a persistent record of tag mappings in a database to allow de-anonymisation.  UID mappings would be most useful to provide persistence of the mappings of data is anonymised in parts.  This would ensure references between files would be maintained.
+
+More thought may need to be given to thread safety if this tool is to used in a multi-threaded environment.
 
 
 
